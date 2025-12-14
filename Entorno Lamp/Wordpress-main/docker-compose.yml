@@ -1,0 +1,49 @@
+version: '3.8'
+#Actividad ejemplo para 1º DAM
+services:
+  wordpress:
+    image: wordpress:latest # Usamos 'latest' para la última versión de WordPress
+    # Exponemos el puerto 8080 del host a la IP de red local (0.0.0.0) para el puerto 80 del contenedor.
+    # 0.0.0.0 significa que escucha en todas las interfaces de red, incluyendo la IP local.
+    ports:
+      - "0.0.0.0:8080:80"
+    environment:
+      # --- VARIABLES AÑADIDAS PARA ACCESO EXTERNO ESTO HAY QUE INVESTIGARLO POR TU CUENTA ---
+      # SI ME HAS LEIDO HASTA AQUÍ, PREGUNTAME EN CLASE
+      #WORDPRESS_URL: http://192.168.1.40:8080  # <--- ¡IMPORTANTE! Usar la IP del host y el puerto.
+      #WORDPRESS_HOME: http://192.168.1.40:8080 # <--- ¡IMPORTANTE! Usar la IP del host y el puerto.
+      # ----------------------------------------------
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    # Usamos '8.0' para la versión más reciente estable y recomendada de MySQL en Docker
+    image: mysql:8.0 
+    environment:
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_password # Contraseña y acceso desde MySQL
+      MYSQL_ROOT_PASSWORD: root_password # Contraseña de root para el acceso administrativo (ej. desde phpMyAdmin)
+    volumes:
+      - db_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin  
+    # Exponemos phpMyAdmin en el puerto 8081 del host
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db # El nombre del servicio de la base de datos
+      MYSQL_ROOT_PASSWORD: root_password # Usar la misma contraseña de root de MySQL
+    depends_on:
+      - db
+
+volumes:
+  wordpress_data:
+  db_data:
