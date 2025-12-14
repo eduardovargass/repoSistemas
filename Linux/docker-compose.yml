@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  custom-linux-gui:
+    # Construimos la imagen personalizada desde la carpeta local
+    build:
+      context: ./custom-xfce-build
+      dockerfile: Dockerfile
+    
+    container_name: linux_custom_user
+    hostname: custom-vnc-docker
+    
+    ports:
+      - "5901:5901" 
+      
+    environment:
+      # Contraseña para la conexión VNC (Cliente -> Servidor)
+      VNC_PW: "VNCpass1" 
+      VNC_RESOLUTION: "1280x1024"
+      
+    # Persistencia de Datos CORREGIDA
+    volumes:
+      # Ahora apunta al home real del usuario DAMDAW creado en el Dockerfile
+      - ./custom-data:/home/DAMDAW 
+      
+    shm_size: '2g'
+    restart: always

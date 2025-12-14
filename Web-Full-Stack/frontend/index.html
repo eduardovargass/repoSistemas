@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<!-- Entorno de Desarrollo (Frontend): Abre tu navegador en http://localhost:8080 -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>EMV Web</title>
+</head>
+<body>
+    <h1>¡Frontend en 8080!</h1>
+    <p>Este código está siendo servido por Nginx (simula tu entorno de desarrollo/despliegue estático).</p>
+
+
+<hr>
+<h2>Estado de la Integración (API)</h2>
+<p id="api-status">Cargando datos del backend...</p>
+
+<script>
+  // Llama al servicio 'backend' a través del puerto expuesto 3000
+  fetch('http://localhost:3000')
+    .then(response => response.json())
+    .then(data => {
+      const statusElement = document.getElementById('api-status');
+      statusElement.innerHTML = `Mensaje: <strong>${data.message}</strong> (${data.timestamp})`;
+      statusElement.style.color = 'green';
+    })
+    .catch(error => {
+      console.error('Error al conectar con el backend:', error);
+      document.getElementById('api-status').textContent = 'Error al conectar con la API del Backend.';
+      document.getElementById('api-status').style.color = 'red';
+    });
+</script>
+
+</body>
+</html>

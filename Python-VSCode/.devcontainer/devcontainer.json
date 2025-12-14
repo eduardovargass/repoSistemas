@@ -1,0 +1,17 @@
+{
+    // Nombre que aparecerá en VS Code
+    "name": "Python Dev EMV",
+    // Referencia al servicio definido en docker-compose.yml
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "python-dev",
+    "workspaceFolder": "/workspace",
+    // Extensiones de VS Code a instalar automáticamente en el contenedor
+    "extensions": [
+        "ms-python.python",
+        "ms-vscode.live-server"
+    ],
+    // Comandos de post-creación (ejecutar pip install, etc.)
+    "postCreateCommand": "pip install -r /workspace/requirements.txt || echo 'No requirements.txt found, skipping install.'"
+}
